@@ -10,8 +10,6 @@ describe('nginx-transparent-redirect-proxy', () => {
 			// when
 			const res = await fetch('http://localhost:4444', fetchOpts);
 
-console.log(res);
-
 			// then
 			assert.equal(res.status, '302');
 			assert.equal(res.headers.get('location'), 'http://example.com');
