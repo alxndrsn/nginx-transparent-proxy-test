@@ -8,7 +8,7 @@
     "lint": "eslint --cache .",
     "test": "yarn lint && mocha test.js"
   },
-  "license": "MIT",
+  "license": "UNLICENSED",
   "dependencies": {
     "express": "^4.18.2"
   },
