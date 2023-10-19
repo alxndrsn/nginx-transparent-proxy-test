@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { assert } = require('chai');
 
 const fetchOpts = {
@@ -23,7 +24,7 @@ describe('nginx-transparent-redirect-proxy', () => {
 
       // then
       assert.equal(res.status, '200');
-      assert.equal(res.headers.get('location'), 'http://localhost:8765');
+      assert.isNull(res.headers.get('location'));
       // and
       const body = await res.text();
       assert.equal(body, exampleHtml());
@@ -32,6 +33,5 @@ describe('nginx-transparent-redirect-proxy', () => {
 });
 
 function exampleHtml() {
-  return `<html>
-</html>`;
+	return fs.readFileSync('./example.com.index.html', { encoding:'utf-8' });
 }
