@@ -1,5 +1,7 @@
+const { assert } = require('chai');
+
 const fetchOpts = {
-  redirect: 'manual,
+  redirect: 'manual',
 };
 
 describe('nginx-transparent-redirect-proxy', () => {
@@ -8,8 +10,10 @@ describe('nginx-transparent-redirect-proxy', () => {
 			// when
 			const res = await fetch('http://localhost:4444', fetchOpts);
 
+console.log(res);
+
 			// then
-			assert.equal(res.statusCode, '302');
+			assert.equal(res.status, '302');
 			assert.equal(res.headers.get('location'), 'http://example.com');
 		});
 	});
@@ -20,7 +24,7 @@ describe('nginx-transparent-redirect-proxy', () => {
 			const res = await fetch('http://localhost:5555', fetchOpts);
 
 			// then
-			assert.equal(res.statusCode, '200');
+			assert.equal(res.status, '200');
 			assert.equal(res.headers.get('location'), 'http://localhost:8765');
 			// and
 			const body = await res.text();

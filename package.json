@@ -5,7 +5,7 @@
   "author": "alxndrsn <alxndrsn>",
   "scripts": {
     "start": "nf start",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "test": "yarn lint && mocha test.js"
   },
   "license": "MIT",
@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.10",
+    "eslint": "^8.51.0",
     "foreman": "^3.0.1",
     "mocha": "^10.2.0"
   }

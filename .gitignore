@@ -1,4 +1,5 @@
 /.eslintcache
 /yarn-error.log
-/node_modules/
+/.nginx/
 /.yarn/
+/node_modules/
