@@ -1,0 +1,20 @@
+{
+  "name": "nginx-transparent-proxy-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "alxndrsn <alxndrsn>",
+  "scripts": {
+    "start": "nf start",
+    "lint": "eslint .",
+    "test": "yarn lint && mocha test.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "foreman": "^3.0.1",
+    "mocha": "^10.2.0"
+  }
+}
