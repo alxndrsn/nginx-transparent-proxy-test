@@ -44,7 +44,13 @@ describe('nginx-transparent-redirect-proxy', () => {
 
     it('should redirect /file/1 with x-secret-token response header', async () => {
       // when
-      const res = await fetch('http://localhost:4444/file/1', fetchOpts);
+      const res = await fetch('http://localhost:4444/file/1', {
+        ...fetchOpts,
+        headers: {
+          ...fetchOpts.headers,
+          'x-should-be-stripped': 'true',
+        }
+      });
 
       // then
       assert.equal(res.status, '307');
