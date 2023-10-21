@@ -27,7 +27,19 @@ describe('nginx-transparent-redirect-proxy', () => {
 
       // then
       assert.equal(res.status, '307');
-      assert.equal(res.headers.get('location'), 'http://example.com');
+      assert.equal(res.headers.get('location'), 'http://example.org');
+    });
+
+    it('should serve /some-path from express', async () => {
+      // when
+      const res = await fetch('http://localhost:4444/some-path', fetchOpts);
+
+      // then
+      assert.equal(res.status, '200');
+      assert.isNull(res.headers.get('location'));
+      // and
+      const body = await res.text();
+      assert.equal(body, 'ok');
     });
 
     it('should redirect /download/upstream_exists with normal 307 headers', async () => {
@@ -56,7 +68,19 @@ describe('nginx-transparent-redirect-proxy', () => {
 
       // then
       assert.equal(res.status, '307');
-      assert.equal(res.headers.get('location'), 'http://example.com');
+      assert.equal(res.headers.get('location'), 'http://example.org');
+    });
+
+    it('should serve /some-path from express', async () => {
+      // when
+      const res = await fetch('http://localhost:5555/some-path', fetchOpts);
+
+      // then
+      assert.equal(res.status, '200');
+      assert.isNull(res.headers.get('location'));
+      // and
+      const body = await res.text();
+      assert.equal(body, 'ok');
     });
 
     it('should redirect /download/upstream_exists invisibly', async () => {

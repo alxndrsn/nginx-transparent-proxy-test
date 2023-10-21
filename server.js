@@ -4,7 +4,11 @@ const app = express();
 const port = 4444;
 
 app.get('/', (req, res) => {
-  res.redirect(307, 'http://example.com');
+  res.redirect(307, 'http://example.org');
+});
+
+app.get('/some-path', (req, res) => {
+  res.send('ok');
 });
 
 app.get('/download/upstream_exists', (req, res) => {
