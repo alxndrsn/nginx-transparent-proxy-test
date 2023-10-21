@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
   res.redirect(307, 'http://example.com');
 });
 
-app.get('/download/*', (req, res) => {
+app.get('/download/some.file', (req, res) => {
   // use an example which actually exists :¬)
   res.redirect(307, 'http://example.com/index.html');
 });
