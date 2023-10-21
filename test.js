@@ -42,18 +42,29 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(body, 'ok');
     });
 
-    it('should redirect /download/upstream_exists with normal 307 headers', async () => {
+    it('should redirect /file/1 with x-secret-token response header', async () => {
       // when
-      const res = await fetch('http://localhost:4444/download/upstream_exists', fetchOpts);
+      const res = await fetch('http://localhost:4444/file/1', fetchOpts);
+
+      // then
+      assert.equal(res.status, '307');
+      assert.equal(res.headers.get('location'), 'http://127.0.0.1:4445/1');
+      assert.isNull(res.headers.get('authorization'));
+      assert.equal(res.headers.get('x-secret-token'), 'top-secret-token');
+    });
+
+    it('should redirect /example/upstream_exists with normal 307 headers', async () => {
+      // when
+      const res = await fetch('http://localhost:4444/example/upstream_exists', fetchOpts);
 
       // then
       assert.equal(res.status, '307');
       assert.equal(res.headers.get('location'), 'http://example.com/index.html');
     });
 
-    it('should redirect /download/upstream_404 with normal 307 headers', async () => {
+    it('should redirect /example/upstream_404 with normal 307 headers', async () => {
       // when
-      const res = await fetch('http://localhost:4444/download/upstream_404', fetchOpts);
+      const res = await fetch('http://localhost:4444/example/upstream_404', fetchOpts);
 
       // then
       assert.equal(res.status, '307');
@@ -83,9 +94,23 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(body, 'ok');
     });
 
-    it('should redirect /download/upstream_exists invisibly', async () => {
+    it('should serve /file/1 from file-server with transparent auth', async () => {
       // when
-      const res = await fetch('http://localhost:5555/download/upstream_exists', fetchOpts);
+      const res = await fetch('http://localhost:5555/file/1', fetchOpts);
+
+      // then
+      assert.equal(res.status, '200');
+      assert.isNull(res.headers.get('location'));
+      assert.isNull(res.headers.get('authorization'));
+      assert.isNull(res.headers.get('x-secret-token'));
+      // and
+      const body = await res.text();
+      assert.equal(body, 'one');
+    });
+
+    it('should redirect /example/upstream_exists invisibly', async () => {
+      // when
+      const res = await fetch('http://localhost:5555/example/upstream_exists', fetchOpts);
 
       // then
       assert.equal(res.status, '200');
@@ -95,9 +120,9 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(body, exampleHtml('index.html'));
     });
 
-    it('should redirect /download/upstream_404 invisibly', async () => {
+    it('should redirect /example/upstream_404 invisibly', async () => {
       // when
-      const res = await fetch('http://localhost:5555/download/upstream_404', fetchOpts);
+      const res = await fetch('http://localhost:5555/example/upstream_404', fetchOpts);
 
       // then
       assert.equal(res.status, '404');
