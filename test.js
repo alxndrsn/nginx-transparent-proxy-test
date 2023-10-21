@@ -16,7 +16,7 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.isNull(res.headers.get('location'));
       // and
       const body = await res.text();
-      assert.equal(body, exampleHtml());
+      assert.equal(body, exampleHtml('index.html'));
     });
   });
 
@@ -30,13 +30,22 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(res.headers.get('location'), 'http://example.com');
     });
 
-    it('should redirect /download/whatever with normal 307 headers', async () => {
+    it('should redirect /download/upstream_exists with normal 307 headers', async () => {
       // when
-      const res = await fetch(`http://localhost:4444/download/some.file`, fetchOpts);
+      const res = await fetch('http://localhost:4444/download/upstream_exists', fetchOpts);
 
       // then
       assert.equal(res.status, '307');
       assert.equal(res.headers.get('location'), 'http://example.com/index.html');
+    });
+
+    it('should redirect /download/upstream_404 with normal 307 headers', async () => {
+      // when
+      const res = await fetch('http://localhost:4444/download/upstream_404', fetchOpts);
+
+      // then
+      assert.equal(res.status, '307');
+      assert.equal(res.headers.get('location'), 'http://example.com/missing');
     });
   });
 
@@ -50,20 +59,32 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(res.headers.get('location'), 'http://example.com');
     });
 
-    it('should redirect /download/whatever invisibly', async () => {
+    it('should redirect /download/upstream_exists invisibly', async () => {
       // when
-      const res = await fetch(`http://localhost:5555/download/some.file`, fetchOpts);
+      const res = await fetch('http://localhost:5555/download/upstream_exists', fetchOpts);
 
       // then
       assert.equal(res.status, '200');
       assert.isNull(res.headers.get('location'));
       // and
       const body = await res.text();
-      assert.equal(body, exampleHtml());
+      assert.equal(body, exampleHtml('index.html'));
+    });
+
+    it('should redirect /download/upstream_404 invisibly', async () => {
+      // when
+      const res = await fetch('http://localhost:5555/download/upstream_404', fetchOpts);
+
+      // then
+      assert.equal(res.status, '404');
+      assert.isNull(res.headers.get('location'));
+      // and
+      const body = await res.text();
+      assert.equal(body, exampleHtml('404.html'));
     });
   });
 });
 
-function exampleHtml() {
-  return fs.readFileSync('./example.com.index.html', { encoding:'utf-8' });
+function exampleHtml(filename) {
+  return fs.readFileSync(`./example.com.${filename}`, { encoding:'utf-8' });
 }

@@ -7,9 +7,14 @@ app.get('/', (req, res) => {
   res.redirect(307, 'http://example.com');
 });
 
-app.get('/download/some.file', (req, res) => {
+app.get('/download/upstream_exists', (req, res) => {
   // use an example which actually exists :¬)
   res.redirect(307, 'http://example.com/index.html');
+});
+
+app.get('/download/upstream_404', (req, res) => {
+  // example.com returns 404 for random URLs WITHOUT trailing slashes
+  res.redirect(307, 'http://example.com/missing');
 });
 
 
