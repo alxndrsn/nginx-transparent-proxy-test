@@ -16,9 +16,9 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(res.headers.get('location'), 'http://example.com');
     });
 
-    it('should redirect /download with normal 307 headers', async () => {
+    it('should redirect /download/whatever with normal 307 headers', async () => {
       // when
-      const res = await fetch('http://localhost:4444/download', fetchOpts);
+      const res = await fetch(`http://localhost:4444/download/some.file`, fetchOpts);
 
       // then
       assert.equal(res.status, '307');
@@ -36,9 +36,9 @@ describe('nginx-transparent-redirect-proxy', () => {
       assert.equal(res.headers.get('location'), 'http://example.com');
     });
 
-    it('should redirect /download invisibly', async () => {
+    it('should redirect /download/whatever invisibly', async () => {
       // when
-      const res = await fetch('http://localhost:5555/download', fetchOpts);
+      const res = await fetch(`http://localhost:5555/download/some.file`, fetchOpts);
 
       // then
       assert.equal(res.status, '200');
@@ -51,5 +51,5 @@ describe('nginx-transparent-redirect-proxy', () => {
 });
 
 function exampleHtml() {
-	return fs.readFileSync('./example.com.index.html', { encoding:'utf-8' });
+  return fs.readFileSync('./example.com.index.html', { encoding:'utf-8' });
 }
